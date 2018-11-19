@@ -9,7 +9,6 @@ gpu-mon 是[open-falcon](http://open-falcon.com/)用于监控GPU状态的一个�
 1. 详细的监控项说明可以参考[metric](https://github.com/open-falcon/gpu-mon/metric)文件，其中常用的一些监控项说明如下:
 
     ```plain
-    
     GPUUtils             GPU 使用率 (%)
     MemUtils             GPU 显存使用率(%)
     FBUsed               GPU 的显存占用(MB)
@@ -73,7 +72,7 @@ gpu-mon 是[open-falcon](http://open-falcon.com/)用于监控GPU状态的一个�
 
 配置文件参考cfg.example.json文件，相关配置项说明如下：
 
-```json
+```
 {
     "falcon": {
         // Agent: 上报falcon客户端的地址

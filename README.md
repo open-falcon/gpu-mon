@@ -2,7 +2,7 @@
 
 ## 简介
 
-gpu-mon 是[open-falcon](http://open-falcon.com/)用于监控GPU状态的一个插件，该插件基于[(DCGM) NVIDIA Data Center GPU Manager](https://developer.nvidia.com/data-center-gpu-manager-dcgm)实现，可以对GPU的状态（显存使用、设备温度等）进行监控。
+gpu-mon 是[open-falcon](http://open-falcon.com/)用于监控GPU状态的一个插件，可以对GPU的状态（显存使用、设备温度等）进行监控。
 
 ### 监控项
 

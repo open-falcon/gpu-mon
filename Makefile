@@ -9,6 +9,10 @@ ifeq "$(GOPATH)" ""
 endif
 PATH := ${GOPATH}/bin:$(PATH)
 
+DCGM ?= $(shell locate nv-hostengine)
+ifeq "$(DCGM)" ""
+  $(error Please confirm that DCGM has been installed before running `make`)
+endif
 
 GitVersion := $(shell git rev-parse --short HEAD || echo unsupported)
 DATE := $(shell date "+%Y-%m-%d %H:%M:%S")
@@ -26,14 +30,15 @@ all: fmt vet build
 fmt:
 	$(GOFMT) -w $(GOFILES)
 
+vet:
+	@go vet $(PACKAGES)
+
 build:
-	@#sh ./build.sh
+	@echo "building gpu-mon ..."
 	@go build -ldflags "-X main.GitCommit=$(GitVersion) \
 			-X 'main.BuildTime=$(DATE)' -X 'main.Version=$(VERSION)' \
 			-X 'main.GoVersion=$(GOVERSION)' " \
 			-o $(TARGET)
-vet:
-	@go vet $(PACKAGES)
 
 # Run golang test cases
 .PHONY: test

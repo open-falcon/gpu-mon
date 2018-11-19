@@ -81,8 +81,6 @@ gpu-mon 是[open-falcon](http://open-falcon.com/)用于监控GPU状态的一个�
     "metric":{
         // ignoreMetrics: 不进行上报的GPU监控配置项
         "ignoreMetrics": [
-            "RPSingleError",
-            "RPDoubleError",
             "PackagePend",
             "Tx",
             "Rx"

@@ -45,14 +45,14 @@ func main() {
 
 	data, err := fetch.Data()
 	if err != nil {
-		cfg.CommonLogger.Error(err)
+		common.Logger.Error(err)
 		return
 	}
 
 	metaDataList := send.BuildMetaDatas(data)
 	err = send.Data(metaDataList)
 	if err != nil {
-		cfg.CommonLogger.Error(err)
+		common.Logger.Error(err)
 		return
 
 	}

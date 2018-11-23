@@ -16,17 +16,18 @@
 package send
 
 import (
-	"github.com/open-falcon/gpu-mon/common"
-	"github.com/open-falcon/gpu-mon/fetch"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/open-falcon/gpu-mon/common"
+	"github.com/open-falcon/gpu-mon/fetch"
 
 	"github.com/sirupsen/logrus"
 )
 
 func init() {
-	cfg.CommonLogger.SetLevel(logrus.PanicLevel)
+	common.Logger.SetLevel(logrus.PanicLevel)
 }
 func Test_buildMetaData(t *testing.T) {
 	conf := common.Config()

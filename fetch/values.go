@@ -111,7 +111,7 @@ func fetchValues(gpuID uint) (values MetricValues, err error) {
 		return values, fmt.Errorf("failed to create dcgm group | %v", err)
 	}
 
-	cfg.CommonLogger.Info("successfully create dcgm group")
+	common.Logger.Info("successfully create dcgm group")
 
 	groupName := fmt.Sprintf("devStatus%d", rand.Uint64())
 	groupID, err := watchFields(gpuID, fieldsID, groupName)
@@ -120,7 +120,7 @@ func fetchValues(gpuID uint) (values MetricValues, err error) {
 		destroyErr := fieldGroupDestroy(fieldsID)
 		if destroyErr != nil {
 			destroyErr = fmt.Errorf("destroy group fields failed | %v", err)
-			cfg.CommonLogger.Error(destroyErr)
+			common.Logger.Error(destroyErr)
 		}
 		return values, err
 	}

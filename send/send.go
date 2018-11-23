@@ -35,7 +35,7 @@ import (
 func buildMetaData(metricName string, metricValue interface{}, tags string, step int) (metaData MetaData) {
 	globalConfig := common.Config()
 	if globalConfig.Log.Level == "Debug" {
-		cfg.CommonLogger.WithFields(logrus.Fields{
+		common.Logger.WithFields(logrus.Fields{
 			"metricName":  metricName,
 			"metricValue": metricValue,
 			"tag":         tags}).Info("check value value")
@@ -43,14 +43,14 @@ func buildMetaData(metricName string, metricValue interface{}, tags string, step
 
 	metricValue, isNaN := checkMetricData(metricValue)
 	if isNaN && globalConfig.Log.Level == "Debug" {
-		cfg.CommonLogger.WithFields(logrus.Fields{
+		common.Logger.WithFields(logrus.Fields{
 			"metricName":  metricName,
 			"metricValue": metricValue,
 			"tag":         tags}).Warn("metric value ")
 	}
 
 	endpoint := getEndPoint()
-	cfg.CommonLogger.WithFields(logrus.Fields{
+	common.Logger.WithFields(logrus.Fields{
 		"endpoint":   endpoint,
 		"metricName": metricName,
 	}).Info("send message to falcon")
@@ -128,7 +128,7 @@ func pushStdout(metaDataList []MetaData) error {
 func pushAgent(metaDataList []MetaData) error {
 	isError := false
 	falconAgent := getFalconAgent()
-	cfg.CommonLogger.WithFields(logrus.Fields{
+	common.Logger.WithFields(logrus.Fields{
 		" falconAgent url": falconAgent,
 	}).Info("send message to falconAgent")
 
@@ -136,7 +136,7 @@ func pushAgent(metaDataList []MetaData) error {
 		js, err := json.Marshal([]MetaData{metaData})
 		if err != nil {
 			isError = true
-			cfg.CommonLogger.WithFields(logrus.Fields{
+			common.Logger.WithFields(logrus.Fields{
 				"error info:": err,
 				"metric name": metaData.Metric,
 			}).Error("convert metaData from struct to json failed")
@@ -146,7 +146,7 @@ func pushAgent(metaDataList []MetaData) error {
 			res, err := http.Post(falconAgent,
 				"Content-Type: application/json", bytes.NewBuffer(js))
 			if err != nil {
-				cfg.CommonLogger.WithFields(logrus.Fields{
+				common.Logger.WithFields(logrus.Fields{
 					"error info:": err,
 					"metric name": metaData.Metric,
 				}).Error("send Data Error")
@@ -154,7 +154,7 @@ func pushAgent(metaDataList []MetaData) error {
 				return
 			}
 			if res.StatusCode != 200 {
-				cfg.CommonLogger.WithFields(logrus.Fields{
+				common.Logger.WithFields(logrus.Fields{
 					"StatusCode":  res.StatusCode,
 					"metric name": metaData.Metric,
 				}).Error("send Data failed")

@@ -44,7 +44,7 @@ build:
 .PHONY: test
 test:
 	@echo "Run all test cases ..."
-	go test ./cfg/ ./send/
+	go test ./common/ ./send/
 	@echo "test Success!"
 
 .PHONY: clean

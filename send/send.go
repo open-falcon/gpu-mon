@@ -24,7 +24,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/open-falcon/gpu-mon/cfg"
+	"github.com/open-falcon/gpu-mon/common"
 	"github.com/open-falcon/gpu-mon/fetch"
 
 	"github.com/sirupsen/logrus"

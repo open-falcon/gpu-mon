@@ -26,7 +26,7 @@ package fetch
 import "C"
 import (
 	"fmt"
-	"github.com/open-falcon/gpu-mon/cfg"
+	"github.com/open-falcon/gpu-mon/common"
 	"math/rand"
 	"unsafe"
 

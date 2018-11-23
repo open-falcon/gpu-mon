@@ -19,9 +19,8 @@ import (
 	"fmt"
 
 	"github.com/NVIDIA/gpu-monitoring-tools/bindings/go/dcgm"
+	"github.com/open-falcon/gpu-mon/common"
 	"github.com/sirupsen/logrus"
-
-	"github.com/open-falcon/gpu-mon/cfg"
 )
 
 //Data 获取监控数据

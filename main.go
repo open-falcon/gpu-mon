@@ -20,7 +20,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/open-falcon/gpu-mon/cfg"
 	"github.com/open-falcon/gpu-mon/fetch"
 	"github.com/open-falcon/gpu-mon/send"
 )
@@ -38,11 +37,12 @@ func main() {
 		return
 	}
 	//默认不采用crontab模式
-	err := cfg.InitConfig(configPath, isContab)
+	err := cfg.InitCommon(configPath, isContab)
 	if err != nil {
 		fmt.Printf("Initial configuration failed, %v", err)
 		return
 	}
+
 	data, err := fetch.Data()
 	if err != nil {
 		cfg.CommonLogger.Error(err)

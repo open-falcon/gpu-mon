@@ -12,4 +12,4 @@
 *.out
 .vscode/
 log/
-cfg/logs
+common/logs

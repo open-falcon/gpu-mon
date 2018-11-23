@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cfg
+package common
 
 import (
 	"fmt"
@@ -59,19 +59,19 @@ func Config() *Conf {
 	return &globalConf
 }
 
-// 读取配置文件
 func readConfigFile(configPath string) (err error) {
-
 	if !fileExist(configPath) {
 		return fmt.Errorf("config file %s is not exicted", configPath)
 	}
-
 	err = config.Load(file.NewSource(file.WithPath(configPath)))
 	if err != nil {
 		return err
 	}
+	return initGlobalConfig()
+}
 
-	//使用命令行配置项覆盖
+func initGlobalConfig() (err error) {
+	//todo: 使用命令行配置项覆盖
 	err = config.Get("falcon").Scan(&globalConf.Falcon)
 	if err != nil {
 		return err
@@ -84,10 +84,9 @@ func readConfigFile(configPath string) (err error) {
 	if err != nil {
 		return err
 	}
-	return nil
+	return err
 }
 
-// 读取忽略的配置项
 func initIgnoreMetrics() {
 	metricFilter := make(map[string]struct{})
 	for _, metric := range globalConf.Metric.IgnoreMetrics {
@@ -99,14 +98,12 @@ func initIgnoreMetrics() {
 	}).Info("ignore metrics ")
 }
 
-// InitConfig 初始化configure
-func InitConfig(configPath string, isCrontab bool) error {
+func initConfig(configPath string, isCrontab bool) error {
 	err := readConfigFile(configPath)
 	if err != nil {
-		return fmt.Errorf("read Config file failed, error message: %v", err)
+		return fmt.Errorf("unable to read Config file: %v", err)
 	}
 	globalConf.IsCrontab = isCrontab
-	initLoggor(globalConf.Log.Dir, globalConf.Log.Level)
 	initIgnoreMetrics()
-	return err
+	return nil
 }

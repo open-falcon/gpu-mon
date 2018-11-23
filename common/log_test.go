@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cfg
+package common
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/sirupsen/logrus"
@@ -56,10 +57,6 @@ func Test_setLogLevel(t *testing.T) {
 }
 
 func Test_createLogPath(t *testing.T) {
-	const (
-		message1 = "logDirPath is not exit, and create it failed"
-		message2 = "logDirPath is not exit, created it"
-	)
 	type args struct {
 		logDirPath string
 		logName    string
@@ -68,20 +65,16 @@ func Test_createLogPath(t *testing.T) {
 		name        string
 		args        args
 		wantLogPath string
-		wantMessage string
 	}{
-		{"test1", args{"./testData", "test.log"}, "testData/test.log", ""},
-		{"test2", args{"./testData/testData1", "test.log"}, "testData/testData1/test.log", message2},
-		{"test3", args{"", "test.log"}, "", message1},
+		{"test1", args{"./testData", "test.log"}, filepath.Join("./testData", "test.log")},
+		{"test2", args{"./testData/testData1", "test.log"}, filepath.Join("./testData/testData1", "test.log")},
+		{"test3", args{"", "test.log"}, filepath.Join(".", "test.log")},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotLogPath, gotMessage := createLogPath(tt.args.logDirPath, tt.args.logName)
+			gotLogPath, _ := createLogPath(tt.args.logDirPath, tt.args.logName)
 			if gotLogPath != tt.wantLogPath {
 				t.Errorf("createLogPath() gotLogPath = %v, want %v", gotLogPath, tt.wantLogPath)
-			}
-			if gotMessage != tt.wantMessage {
-				t.Errorf("createLogPath() gotMessage = %v, want %v", gotMessage, tt.wantMessage)
 			}
 			if fileExist("./testData/testData1") {
 				os.RemoveAll("./testData/testData1")

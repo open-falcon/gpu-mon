@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cfg
+package common
 
 import (
 	"reflect"
@@ -62,7 +62,7 @@ func TestInitConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := InitConfig(tt.args.configPath, tt.args.isCrontab); (err != nil) != tt.wantErr {
+			if err := InitCommon(tt.args.configPath, tt.args.isCrontab); (err != nil) != tt.wantErr {
 				t.Errorf("InitConfig() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if globalConf.IsCrontab != tt.wantIsCrontab {

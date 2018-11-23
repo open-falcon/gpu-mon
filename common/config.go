@@ -21,7 +21,6 @@ import (
 
 	"github.com/micro/go-config"
 	"github.com/micro/go-config/source/file"
-	"github.com/sirupsen/logrus"
 )
 
 type falconConf struct {
@@ -93,9 +92,7 @@ func initIgnoreMetrics() {
 		metricFilter[metric] = struct{}{}
 	}
 	globalConf.MetricFilter = metricFilter
-	Logger.WithFields(logrus.Fields{
-		"ignore metrics": globalConf.Metric.IgnoreMetrics,
-	}).Info("ignore metrics ")
+
 }
 
 func initConfig(configPath string, isCrontab bool) error {

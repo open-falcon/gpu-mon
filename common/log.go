@@ -65,9 +65,9 @@ func setLogOut(logDirPath, logName string, log *logrus.Logger) {
 	logPath, _ := createLogPath(logDirPath, logName)
 	file, err := os.OpenFile(logPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
-		log.Out = file
-	} else {
 		log.Out = os.Stderr
+	} else {
+		log.Out = file
 	}
 }
 
@@ -83,7 +83,7 @@ func configLogger(logDirPath, logLevel, logName string, log *logrus.Logger) {
 	setLogFormat(log)
 	err := setLogLevel(logLevel, log)
 	if err != nil {
-		log.Println("set log level error: %v", err)
+		log.Printf("set log level error: %v", err)
 	}
 }
 

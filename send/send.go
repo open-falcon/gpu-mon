@@ -16,7 +16,6 @@
 package send
 
 import (
-	"bk/gpu_mon/cfg"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -99,7 +98,7 @@ func updateMetaDataList(rawData fetch.RawData, metaDataList []MetaData) []MetaDa
 	return metaDataList
 }
 
-func addSumMetric(metaDataList []MetaData) []MetaData {
+func addSumMetric(metaDataList []MetaData, rawDataList []fetch.RawData) []MetaData {
 	for sumMetricName, sumMetricValue := range sumMetric {
 		metaData := buildMetaData(sumMetricName, &sumMetricValue, "type=sum", 60)
 		metaDataList = append(metaDataList, metaData)
@@ -113,9 +112,9 @@ func addSumMetric(metaDataList []MetaData) []MetaData {
 // BuildMetaDatas 构建发送序列
 func BuildMetaDatas(rawDataList []fetch.RawData) (metaDataList []MetaData) {
 	for _, rawData := range rawDataList {
-		updateMetaDataList(rawData, metaDataList)
+		metaDataList = updateMetaDataList(rawData, metaDataList)
 	}
-	metaDataList = addSumMetric(metaDataList)
+	metaDataList = addSumMetric(metaDataList, rawDataList)
 	return metaDataList
 }
 

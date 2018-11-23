@@ -23,16 +23,17 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func updateRawDataList(count uint, rawDataList []RawData) []RawData {
+func updateRawDataList(gpuNum uint, rawDataList []RawData, deviceSupportDCGM map[uint]struct{}) []RawData {
 	var dcgmSupported = -1
 	var values MetricValues //
-	if gpuID, ok := deviceSupportDCGM[i]; ok {
+	if _, ok := deviceSupportDCGM[gpuNum]; ok {
+		gpuID := gpuNum
 		//gpu支持DCGM
 		dcgmSupported = 1
 		common.Logger.WithFields(logrus.Fields{
 			"gpuId": gpuID,
 		}).Info("device support dcgm")
-		values, err = fetchValues(gpuID)
+		values, err := fetchValues(gpuID)
 		if err != nil {
 			common.Logger.Error(err)
 		}
@@ -42,26 +43,26 @@ func updateRawDataList(count uint, rawDataList []RawData) []RawData {
 		values.DcgmSupported = &dcgmSupported
 	} else {
 		common.Logger.WithFields(logrus.Fields{
-			"gpuId": i,
+			"gpuId": gpuNum,
 		}).Error("device do not support dcgm")
 		values.DcgmSupported = &dcgmSupported
 	}
 
 	rawData := RawData{
-		GpuID:  i,
+		GpuID:  gpuNum,
 		Values: values,
 	}
-	rawDataList[i] = rawData
+	rawDataList[gpuNum] = rawData
 	common.Logger.WithFields(logrus.Fields{
-		"gpuId": i,
+		"gpuId": gpuNum,
 	}).Info("successful fetch gpu info")
+	return rawDataList
 }
 
-func buildDataList(count uint, deviceSupportDCGM map[uint]struct{}) {
-	// 获取GPU设备信息
-	rawDataList = make([]RawData, count)
+func buildDataList(count uint, deviceSupportDCGM map[uint]struct{}) []RawData {
+	rawDataList := make([]RawData, count)
 	for i := uint(0); i < count; i++ {
-		rawDataList = updateRawDataList(count, rawDataList)
+		rawDataList = updateRawDataList(i, rawDataList, deviceSupportDCGM)
 	}
 	return rawDataList
 }
@@ -77,7 +78,7 @@ func getSupportedDevices() (map[uint]struct{}, error) {
 
 	deviceSupportDCGM := make(map[uint]struct{})
 	for _, gpuID := range gpus {
-		deviceSupportDCGM[gpuID] = gpuID
+		deviceSupportDCGM[gpuID] = struct{}{}
 	}
 	return deviceSupportDCGM, err
 }
@@ -86,13 +87,17 @@ func fetchData() ([]RawData, error) {
 	// 获取所有GPU的数量
 	count, err := dcgm.GetAllDeviceCount()
 	if err != nil {
-		return nil, fmt.Errorf("unable to get GPU device number | %s", err)
+		return rawDataList, fmt.Errorf("unable to get GPU device number | %s", err)
 	}
 	common.Logger.Info("successful get all gpu device")
 
-	deviceSupportDCGM := getSupportedDevices()
+	deviceSupportDCGM, err := getSupportedDevices()
+	if err != nil {
+		return rawDataList, err
+	}
 
-	rawDataList := buildDataList(count, deviceSupportDCGM)
+	rawDataList = buildDataList(count, deviceSupportDCGM)
+	return rawDataList, nil
 }
 
 //Data 获取监控数据

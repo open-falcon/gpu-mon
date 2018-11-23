@@ -29,7 +29,7 @@ func init() {
 	cfg.CommonLogger.SetLevel(logrus.PanicLevel)
 }
 func Test_buildMetaData(t *testing.T) {
-	conf := cfg.Config()
+	conf := common.Config()
 	conf.Metric.EndPoint = "testEndPoint"
 	metricdata := 3
 	wantMetaData := MetaData{
@@ -107,7 +107,7 @@ func TestBuildMetaDatas(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		config := cfg.Config()
+		config := common.Config()
 		config.Metric.EndPoint = "testEndPoint"
 
 		t.Run(tt.name, func(t *testing.T) {
@@ -160,7 +160,7 @@ func TestData(t *testing.T) {
 		{"test3", args{inputMetaDataList}, "http://127.0.0.1:1988/v1/push", false},
 	}
 	for _, tt := range tests {
-		conf := cfg.Config()
+		conf := common.Config()
 		conf.Falcon.Agent = tt.agent
 		t.Run(tt.name, func(t *testing.T) {
 			if err := pushAgent(tt.args.metaDataList); (err != nil) != tt.wantErr {

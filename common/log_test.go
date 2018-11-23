@@ -35,15 +35,15 @@ func Test_setLogLevel(t *testing.T) {
 		wantErr   bool
 		wantLevel logrus.Level
 	}{
-		{"test1", args{"Warn", CommonLogger}, false, logrus.WarnLevel},
-		{"test2", args{"Error", CommonLogger}, false, logrus.ErrorLevel},
-		{"test3", args{"Debug", CommonLogger}, false, logrus.DebugLevel},
-		{"test4", args{"wrongLevel", CommonLogger}, true, logrus.WarnLevel},
+		{"test1", args{"Warn", Logger}, false, logrus.WarnLevel},
+		{"test2", args{"Error", Logger}, false, logrus.ErrorLevel},
+		{"test3", args{"Debug", Logger}, false, logrus.DebugLevel},
+		{"test4", args{"wrongLevel", Logger}, true, logrus.WarnLevel},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			err := setLogLevel(tt.args.logLevel, tt.args.Log)
-			getLevel := CommonLogger.GetLevel()
+			getLevel := Logger.GetLevel()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("setLogLevel() \nerror = %v,\nwantErr = %v", err, tt.wantErr)
 			}

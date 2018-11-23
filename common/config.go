@@ -93,7 +93,7 @@ func initIgnoreMetrics() {
 		metricFilter[metric] = struct{}{}
 	}
 	globalConf.MetricFilter = metricFilter
-	CommonLogger.WithFields(logrus.Fields{
+	Logger.WithFields(logrus.Fields{
 		"ignore metrics": globalConf.Metric.IgnoreMetrics,
 	}).Info("ignore metrics ")
 }

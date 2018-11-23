@@ -20,7 +20,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/open-falcon/gpu-mon/cfg"
+	"github.com/open-falcon/gpu-mon/common"
 )
 
 func Test_decimal(t *testing.T) {
@@ -97,7 +97,7 @@ func Test_getFalconAgent(t *testing.T) {
 		{"test2", "testAgent", "testAgent"},
 	}
 	for _, tt := range tests {
-		conf := cfg.Config()
+		conf := common.Config()
 		conf.Falcon.Agent = tt.inputFalconAgent
 		t.Run(tt.name, func(t *testing.T) {
 			if gotFalconAgent := getFalconAgent(); gotFalconAgent != tt.wantFalconAgent {
@@ -119,7 +119,7 @@ func Test_getEndPoint(t *testing.T) {
 		{"test2", "testhost", "testhost"},
 	}
 	for _, tt := range tests {
-		conf := cfg.Config()
+		conf := common.Config()
 		conf.Metric.EndPoint = tt.inputEndPoint
 		t.Run(tt.name, func(t *testing.T) {
 			if gotEndPoint := getEndPoint(); gotEndPoint != tt.wantEndPoint {

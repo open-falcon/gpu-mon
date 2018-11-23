@@ -20,7 +20,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/open-falcon/gpu-mon/cfg"
+	"github.com/open-falcon/gpu-mon/common"
 )
 
 // 保留float数的两位小数
@@ -77,12 +77,12 @@ func checkMetricData(data interface{}) (res interface{}, isNaN bool) {
 }
 
 func isIgnore(metricName string) bool {
-	_, ok := cfg.Config().MetricFilter[metricName]
+	_, ok := common.Config().MetricFilter[metricName]
 	return ok
 }
 
 func getEndPoint() (endPoint string) {
-	globalConfig := cfg.Config()
+	globalConfig := common.Config()
 	if globalConfig.Metric.EndPoint != "" {
 		endPoint = globalConfig.Metric.EndPoint
 	} else {
@@ -92,7 +92,7 @@ func getEndPoint() (endPoint string) {
 }
 
 func getFalconAgent() (falconAgent string) {
-	url := cfg.Config().Falcon.Agent
+	url := common.Config().Falcon.Agent
 	if url != "" {
 		falconAgent = url
 	} else {

@@ -16,6 +16,7 @@
 package send
 
 import (
+	"bk/gpu_mon/cfg"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -32,7 +33,7 @@ import (
 
 // 将metricValue值转化为meteData值
 func buildMetaData(metricName string, metricValue interface{}, tags string, step int) (metaData MetaData) {
-	globalConfig := cfg.Config()
+	globalConfig := common.Config()
 	if globalConfig.Log.Level == "Debug" {
 		cfg.CommonLogger.WithFields(logrus.Fields{
 			"metricName":  metricName,
@@ -66,36 +67,6 @@ func buildMetaData(metricName string, metricValue interface{}, tags string, step
 	return metaData
 }
 
-// BuildMetaDatas 构建发送序列
-func BuildMetaDatas(rawDataList []fetch.RawData) (metaDataList []MetaData) {
-	for _, rawData := range rawDataList {
-		gpuIDTag := "GpuId=" + strconv.Itoa(int(rawData.GpuID)) // Tag: GpuId=0 ...
-		metricValues := rawData.Values
-		// 遍历 metricValue结构体
-		structType := reflect.TypeOf(metricValues)
-		structValue := reflect.ValueOf(metricValues)
-		for i := 0; i < structValue.NumField(); i++ {
-			metricName := structType.Field(i).Name
-			metricValue := structValue.Field(i).Interface()
-			if isIgnore(metricName) {
-				continue
-			}
-			metaData := buildMetaData(metricName, metricValue, gpuIDTag, 60)
-			metaDataList = append(metaDataList, metaData)
-			updateSumMetric(metricName, metricValue)
-		}
-	}
-
-	for sumMetricName, sumMetricValue := range sumMetric {
-		metaData := buildMetaData(sumMetricName, &sumMetricValue, "type=sum", 60)
-		metaDataList = append(metaDataList, metaData)
-		aveValue := dvInt(sumMetricValue, len(rawDataList), 1)
-		metaData = buildMetaData(sumMetricName, &aveValue, "type=ave", 60)
-		metaDataList = append(metaDataList, metaData)
-	}
-	return metaDataList
-}
-
 func updateSumMetric(metricName string, metricValue interface{}) {
 	if sumValue, ok := sumMetric[metricName]; ok {
 		value, _ := checkMetricData(metricValue)
@@ -107,6 +78,45 @@ func updateSumMetric(metricName string, metricValue interface{}) {
 			sumMetric[metricName] += int(value.(uint))
 		}
 	}
+}
+
+func updateMetaDataList(rawData fetch.RawData, metaDataList []MetaData) []MetaData {
+	gpuIDTag := "GpuId=" + strconv.Itoa(int(rawData.GpuID)) // Tag: GpuId=0 ...
+	metricValues := rawData.Values
+	// 遍历 metricValue结构体
+	structType := reflect.TypeOf(metricValues)
+	structValue := reflect.ValueOf(metricValues)
+	for i := 0; i < structValue.NumField(); i++ {
+		metricName := structType.Field(i).Name
+		metricValue := structValue.Field(i).Interface()
+		if isIgnore(metricName) {
+			continue
+		}
+		metaData := buildMetaData(metricName, metricValue, gpuIDTag, 60)
+		metaDataList = append(metaDataList, metaData)
+		updateSumMetric(metricName, metricValue)
+	}
+	return metaDataList
+}
+
+func addSumMetric(metaDataList []MetaData) []MetaData {
+	for sumMetricName, sumMetricValue := range sumMetric {
+		metaData := buildMetaData(sumMetricName, &sumMetricValue, "type=sum", 60)
+		metaDataList = append(metaDataList, metaData)
+		aveValue := dvInt(sumMetricValue, len(rawDataList), 1)
+		metaData = buildMetaData(sumMetricName, &aveValue, "type=ave", 60)
+		metaDataList = append(metaDataList, metaData)
+	}
+	return metaDataList
+}
+
+// BuildMetaDatas 构建发送序列
+func BuildMetaDatas(rawDataList []fetch.RawData) (metaDataList []MetaData) {
+	for _, rawData := range rawDataList {
+		updateMetaDataList(rawData, metaDataList)
+	}
+	metaDataList = addSumMetric(metaDataList)
+	return metaDataList
 }
 
 func pushStdout(metaDataList []MetaData) error {
@@ -162,7 +172,7 @@ func pushAgent(metaDataList []MetaData) error {
 
 // Data 向falcon上报数据
 func Data(metaDataList []MetaData) error {
-	if cfg.Config().IsCrontab {
+	if common.Config().IsCrontab {
 		return pushStdout(metaDataList)
 	}
 	return pushAgent(metaDataList)

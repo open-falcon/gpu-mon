@@ -26,7 +26,7 @@ import (
 // 日志文件
 var (
 	commonLogName = "monitor.log"
-	CommonLogger  = logrus.New()
+	Logger        = logrus.New()
 )
 
 // 创建log日志路径，返回创建目录及创建的相关信息
@@ -89,5 +89,5 @@ func configLogger(logDirPath, logLevel, logName string, log *logrus.Logger) {
 
 // 初始化日志对象
 func initLoggor(logDirPath string, logLevel string) {
-	configLogger(logDirPath, logLevel, commonLogName, CommonLogger)
+	configLogger(logDirPath, logLevel, commonLogName, Logger)
 }

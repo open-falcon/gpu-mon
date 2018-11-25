@@ -1,0 +1,42 @@
+GPUUtils                  % GPU Utilization
+MemUtils                  % Memory Utilization
+Encoder                   % Encoder Utilization
+Decoder                   % Decoder Utilization
+FBUsed                    MB Used Frame Buffer in MB
+SingleBitError            Total single bit aggregate (persistent) ECC errors
+DoubleBitError            Total double bit aggregate (persistent) ECC errors
+SmClock                   MHz SM clock for the device
+MemClock                  MHz Memory clock for the device
+BAR1Used                  MB Used BAR1 of the GPU in MB
+Rx                        MB PCIe Rx utilization information
+Tx                        MB PCIe Tx utilization information
+Replays                   PCIe replay counter
+Performance               Performance state (P-State) 0-15. 0=highest
+FanSpeed                  % Fan speed for the device in percent 0-100
+PowerUsed              	  W Power usage for the device in Watts
+DeviceTemperature         °C Current temperature readings for the device, in degrees C
+MemTemperature            °C Memory temperature for the device
+SlowdownTemperature       °C Slowdown temperature for the device
+ShutdownTemperature       °C Shutdown temperature for the device Modules
+PowerCurrentLimit      	  W Current Power limit for the device
+PowerMinManLimit       	  W Minimum power management limit for the device
+PowerMaxManLimit       	  W Maximum power management limit for the device
+PowerDefaultManLimit   	  W Default power management limit for the device
+PowerEnforcedLimit     	  W Effective power limit that the driver enforces after taking into account all limiters
+PowerViolationTime        W Power Violation time in usec
+FBtotal                   MB Total Frame Buffer of the GPU in MB
+FBfree                    MB Free Frame Buffer in MB
+MemAppClock               Mz Memory Application clocks
+SMAppClock                Mz SM Application clocks
+VideoEnClock              Mz Video encoder/decoder clock for the device
+RPSingleError             Number of retired pages because of single bit errors Note: monotonically increasing
+RPDoubleError             Number of retired pages because of double bit errors Note: monotonically increasing
+SBErrors                  Total single bit volatile ECC errors
+DBErrors                  Total double bit volatile ECC errors
+MemSBAErrors              Device memory single bit aggregate (persistent) ECC errors Note: monotonically increasing
+MemDBAErrors              Device memory double bit aggregate (persistent) ECC errors Note: monotonically increasing
+DeviceMemSBErrors         Device memory single bit volatile ECC errors
+DeviceMemDBErrors         Device memory double bit volatile ECC errors
+RegisterSBErrors          Register file single bit volatile ECC errors
+RegisterDBErrors          Register file double bit volatile ECC errors
+DcgmSupported        	  supported 1, not supported -1

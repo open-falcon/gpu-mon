@@ -6,7 +6,7 @@ gpu-mon 是[open-falcon](http://open-falcon.com/)用于监控GPU状态的一个�
 
 ### 监控项
 
-1. 详细的监控项说明可以参考[metric](https://github.com/open-falcon/gpu-mon/metric)文件，其中常用的一些监控项说明如下:
+1. 详细的监控项说明可以参考[metrics](https://github.com/open-falcon/gpu-mon/blob/master/metrics)文件，其中常用的一些监控项说明如下:
 
     ```plain
     GPUUtils             GPU 使用率 (%)
@@ -27,13 +27,13 @@ gpu-mon 是[open-falcon](http://open-falcon.com/)用于监控GPU状态的一个�
 
 ### 1. 相关依赖
 
-1. 安装dcgm(1.4.2版本)并开启nv-hostengine进程
+1. 安装DCGM并开启nv-hostengine进程
 2. 目前能够支持DCGM 1.4.2版本全部功能的GPU型号包括：
-    - K80及K80以后的Tesla GPU
-    - Maxwell及更新的非Tesla GPU
+   - K80及K80以后的Tesla GPU
+   - Maxwell及更新的非Tesla GPU  
 
-    关于 Dcgm支持的GPU型号及DCGM安装可以参考[(DCGM) NVIDIA Data Center GPU Manager](https://developer.nvidia.com/data-center-gpu-manager-dcgm)
-3. 目前插件已测试支持的GPU型号包括：v100、p4、p40。
+   关于Dcgm支持的GPU型号及DCGM安装可以参考[(DCGM) NVIDIA Data Center GPU Manager](https://developer.nvidia.com/data-center-gpu-manager-dcgm)
+3. 目前插件已测试支持的GPU型号包括：v100、p4、p40，测试使用的DCGM版本为1.4.2。
 
 ### 2. 安装及使用
 
